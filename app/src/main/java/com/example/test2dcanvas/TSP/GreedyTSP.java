@@ -1,9 +1,13 @@
 package com.example.test2dcanvas.TSP;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+
+import com.example.test2dcanvas.myview.Point;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class GreedyTSP {
     private int cityNum; // 城市数量
@@ -12,38 +16,32 @@ public class GreedyTSP {
     private int[] colable;//代表列，也表示是否走过，走过置0
     private int[] row;//代表行，选过置0
 
-    public GreedyTSP(int n) {
+    private Canvas mCanvas = null;
+    private Paint mPaint = null;
+
+    ArrayList<Point> mList = new ArrayList<Point>();
+
+    public GreedyTSP(int n, Canvas canvas, Paint paint) {
         cityNum = n;
+        mCanvas = canvas;
+        mPaint = paint;
     }
 
-    public void init(String filename) throws IOException {
+    public void init(ArrayList<Point> list) throws IOException {
         // 读取数据
         int[] x;
         int[] y;
         String strbuff;
-        BufferedReader data = new BufferedReader(new InputStreamReader(
-                new FileInputStream(filename)));
+        mList = (ArrayList<Point>)list.clone();
+
         distance = new int[cityNum][cityNum];
         x = new int[cityNum];
         y = new int[cityNum];
-        //过滤头几行无用的说明
-        while ((strbuff = data.readLine())!=null) {
-            if (!Character.isAlphabetic(strbuff.charAt(0)))
-                break;
-        }
-        String[] tmp = strbuff.split(" ");
-        x[0] = Integer.valueOf(tmp[1]);// x坐标
-        y[0] = Integer.valueOf(tmp[2]);// y坐标
 
-        for (int i = 1; i < cityNum; i++) {
-            // 读取一行数据，数据格式1 6734 1453
-            strbuff = data.readLine();
-            // 字符分割
-            String[] strcol = strbuff.split(" ");
-            x[i] = Integer.valueOf(strcol[1]);// x坐标
-            y[i] = Integer.valueOf(strcol[2]);// y坐标
+        for (int i = 0; i < cityNum; i++) {
+            x[i] = list.get(i).getX();// x坐标
+            y[i] = list.get(i).getY();// y坐标
         }
-        data.close();
 
         // 计算距离矩阵
         // ，针对具体问题，距离计算方法也不一样，此处用的是att48作为案例，它有48个城市，距离计算方法为伪欧氏距离，最优值为10628
@@ -101,6 +99,8 @@ public class GreedyTSP {
     }
 
     public void solve(){
+        float xF0 = 0;
+        float yF0 = 0;
 
         int[] temp = new int[cityNum];
         String path="0";
@@ -125,8 +125,16 @@ public class GreedyTSP {
             path+="-->" + j;
             //System.out.println(i + "-->" + j);
             //System.out.println(distance[i][j]);
+
+            mPaint.setColor(Color.RED);//画笔颜色
+            mCanvas.drawLine(xF0,yF0,mList.get(j).getX(),mList.get(j).getY(),mPaint);//背景颜色所设计范围
+            xF0 = mList.get(j).getX();
+            yF0 = mList.get(j).getY();
+
             s = s + distance[i][j];
             i = j;//当前节点指向下一节点
+
+
         }
         System.out.println("路径:" + path);
         System.out.println("总距离为:" + s);
@@ -171,14 +179,6 @@ public class GreedyTSP {
             System.out.println();
         }
         System.out.println("print end....");
-    }
-
-    public static void main(String[] args) throws IOException {
-        System.out.println("Start....");
-        GreedyTSP ts = new GreedyTSP(51);
-        ts.init("resources/eil51.txt");
-//		ts.printinit();
-        ts.solve();
     }
 
 }

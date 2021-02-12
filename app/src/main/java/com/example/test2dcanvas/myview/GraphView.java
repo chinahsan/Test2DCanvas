@@ -8,6 +8,9 @@ import android.graphics.Path;
 import android.util.Log;
 import android.view.View;
 
+import com.example.test2dcanvas.TSP.GreedyTSP;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -107,6 +110,16 @@ public class GraphView extends View {
             xF0 = gList.get(i).getX();
             yF0 = gList.get(i).getY();
         }
+
+        System.out.println("Start....");
+        GreedyTSP ts = new GreedyTSP(100,canvas,paint);
+        try {
+            ts.init(gList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//		ts.printinit();
+        ts.solve();
     }
 
 }
