@@ -3,6 +3,7 @@ package com.example.test2dcanvas;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.example.test2dcanvas.myview.GraphView;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import androidx.fragment.app.Fragment;
@@ -60,12 +61,16 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        /*
         View rootView = inflater.inflate(R.layout.item_detail, container, false);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
         }
+        */
+
+        View rootView = new GraphView(getActivity());
 
         return rootView;
     }
