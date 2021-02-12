@@ -8,11 +8,14 @@ import android.graphics.Path;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GraphView extends View {
     private float xA,yA,xB,yB,xC,yC,xD,yD,xE,yE,xF,yF,xG,yG,xH,yH,xI,yI,xJ,yJ,x,y;//各个点的定义
     private int r;
+    ArrayList<Point> gList = new ArrayList<Point>();
+
     public GraphView(Context context) {
         super(context);
     }
@@ -84,6 +87,25 @@ public class GraphView extends View {
             path.lineTo(xJ,yJ);
             path.close();//闭合
             canvas.drawPath(path,paint);
+
+            Point point = new Point((int)(x+r+r*Math.sin(Math.toRadians(18))),(int)(y-r*Math.sin(Math.toRadians(36))));
+            paint.setStyle(Paint.Style.FILL);
+            paint.setStrokeWidth(1);//画笔宽度
+            paint.setColor(Color.RED);//画笔颜色
+            canvas.drawText(i + 1 + "",(float) (x+r+r*Math.sin(Math.toRadians(18))),(float) (y-r*Math.sin(Math.toRadians(36))),paint);
+            gList.add(point);
+        }
+
+        float xF0 = gList.get(0).getX();
+        float yF0 = gList.get(0).getY();
+
+        for(int i = 1;i < gList.size();i++) {
+            System.out.println(gList.get(i).getX() + "--" + gList.get(i).getY());
+            paint.setColor(Color.RED);//画笔颜色
+            //canvas.drawLine(xF0,yF0,gList.get(i).getX(),gList.get(i).getY(),paint);//背景颜色所设计范围
+
+            xF0 = gList.get(i).getX();
+            yF0 = gList.get(i).getY();
         }
     }
 
